@@ -1,0 +1,12 @@
+{
+  "name": "graphql1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "express": "4.16.2",
+    "express-graphql": "0.6.11",
+    "graphql": "0.12.3",
+    "ramda": "0.25.0"
+  }
+}
