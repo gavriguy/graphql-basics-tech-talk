@@ -83,7 +83,13 @@ async function getEpisodes({ showId, seasonNumber }) {
   return R.compose(R.path(['episodes']), R.find(R.propEq('number', seasonNumber)))(seasons);
 }
 
-// exports.shows = shows;
+async function getEpisodeByIndex({ showId, seasonNumber, index }) {
+  await pause();
+  const episodes = await getEpisodes({ showId, seasonNumber });
+  return episodes[index];
+}
+
 exports.getShows = getShows;
 exports.getSeasons = getSeasons;
 exports.getEpisodes = getEpisodes;
+exports.getEpisodeByIndex = getEpisodeByIndex;
