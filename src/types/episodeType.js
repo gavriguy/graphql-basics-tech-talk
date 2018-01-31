@@ -12,18 +12,18 @@ const EpisodeType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'About the show.',
     },
-    nextEpisode: {
-      type: EpisodeType,
-      description: 'The next episode in the current season',
-    },
     number: {
       type: GraphQLInt,
       description: 'The number of the episode',
     },
     seasonNumber: {
       type: GraphQLInt,
-      description: 'The number of the season the episode is in'
-    }
+      description: 'The number of the season the episode is in',
+    },
+    nextEpisode: {
+      type: EpisodeType,
+      description: 'The next episode in the current season',
+    },
   }),
 });
 

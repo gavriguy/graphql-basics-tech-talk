@@ -3,7 +3,8 @@ const { shows } = require('../data');
 
 const mapIndexed = R.addIndex(R.map);
 
-function getAllShows() {
+function getAllShows({ id }) {
+  const filteredShows = id ? R.filter(R.propEq('id', id))(shows) : shows;
   return R.map(({ id, title, about, seasons }) => ({
     id,
     title,
@@ -17,7 +18,7 @@ function getAllShows() {
             renderEpisode({ index, episodes: season.episodes, seasonNumber: season.number }),
           )(season.episodes),
       }))(seasons),
-  }))(shows);
+  }))(filteredShows);
 }
 
 function renderEpisode({ index, episodes, seasonNumber }) {

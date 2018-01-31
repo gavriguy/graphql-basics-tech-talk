@@ -20,22 +20,29 @@ const queryType = new GraphQLObjectType({
   fields: {
     shows: {
       type: new GraphQLList(ShowType),
-      resolve: getAllShows,
-    },
-    episodes: {
-      type: new GraphQLList(EpisodeType),
+      description: 'Get a list of shows',
+      resolve: (_, args) => getAllShows(args),
       args: {
-        showId: {
-          type: new GraphQLNonNull(GraphQLString),
-          description: 'The id of the show.',
-        },
-        seasonNumber: {
-          type: new GraphQLNonNull(GraphQLInt),
-          description: 'The number of the season',
+        id: {
+          type: GraphQLString,
+          description: 'Filter shows by thier ID',
         },
       },
-      resolve: (_, args) => getEpisodesByShowIdAndSeasonNumber(args),
     },
+    // episodes: {
+    //   type: new GraphQLList(EpisodeType),
+    //   args: {
+    //     showId: {
+    //       type: new GraphQLNonNull(GraphQLString),
+    //       description: 'The id of the show.',
+    //     },
+    //     seasonNumber: {
+    //       type: new GraphQLNonNull(GraphQLInt),
+    //       description: 'The number of the season',
+    //     },
+    //   },
+    //   resolve: (_, args) => getEpisodesByShowIdAndSeasonNumber(args),
+    // },
   },
 });
 
