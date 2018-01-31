@@ -1,11 +1,24 @@
 const R = require('ramda');
 const { shows } = require('../data');
 
-function getAllShows() {
-  return R.map(({ id, title, about }) => ({ id, title, about }))(shows);
-}
-
 const mapIndexed = R.addIndex(R.map);
+
+function getAllShows() {
+  return R.map(({ id, title, about, seasons }) => ({
+    id,
+    title,
+    about,
+    seasons: () =>
+      R.map(season => ({
+        number: season.number,
+        year: season.year,
+        episodes: () =>
+          mapIndexed((_episode, index) =>
+            renderEpisode({ index, episodes: season.episodes, seasonNumber: season.number }),
+          )(season.episodes),
+      }))(seasons),
+  }))(shows);
+}
 
 function renderEpisode({ index, episodes, seasonNumber }) {
   const episode = episodes[index];

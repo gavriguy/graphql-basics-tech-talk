@@ -1,4 +1,5 @@
-const { GraphQLObjectType, GraphQLID, GraphQLString } = require('graphql');
+const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLList } = require('graphql');
+const { SeasonType } = require('./SeasonType');
 
 const ShowType = new GraphQLObjectType({
   name: 'Show',
@@ -15,6 +16,10 @@ const ShowType = new GraphQLObjectType({
     about: {
       type: GraphQLString,
       description: 'About the show.',
+    },
+    seasons: {
+      type: new GraphQLList(SeasonType),
+      description: 'The seasons of the show.'
     },
   },
 });
