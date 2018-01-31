@@ -38,6 +38,23 @@ const shows = [
       },
     ],
   },
+  {
+    id: '2',
+    title: 'Twin Peaks',
+    about: `Picks up 25 years after the inhabitants of a quaint northwestern town are stunned when their homecoming queen is murdered.`,
+    seasons: [
+      {
+        number: 1,
+        year: '2017',
+        episodes: [
+          {
+            title: 'Part 1',
+            about: `A man observes a mysterious glass box, South Dakota police discover a hideous crime and Hawk receives a cryptic message about Special Agent Dale Cooper.`,
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 exports.shows = shows;
