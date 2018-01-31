@@ -12,7 +12,7 @@ var {
 } = require('graphql');
 const R = require('ramda');
 const { showType, episodeType } = require('./types');
-const { getAllShows, getEpisodesByShowIdAndSeasonNumber } = require('./data');
+const { getAllShows, getEpisodesByShowIdAndSeasonNumber } = require('./data-utils');
 
 const queryType = new GraphQLObjectType({
   name: 'QueryType',

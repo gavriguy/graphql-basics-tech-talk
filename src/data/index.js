@@ -1,5 +1,3 @@
-const R = require('ramda');
-
 const shows = [
   {
     id: '1',
@@ -24,39 +22,22 @@ const shows = [
           },
         ],
       },
+      {
+        number: 2,
+        year: '2012',
+        episodes: [
+          {
+            title: 'The Smile',
+            about: `An asset from Carrie's former life comes in from the cold. Freshman Congressman Nick Brody discovers that Abu Nazir may not be content with his nonviolent approach to affecting change in American foreign policy.`,
+          },
+          {
+            title: 'Beirut Is Back',
+            about: `Before she makes it to a safe house, Carrie interviews the wife of a Lebanese official on her own, learning that Abu Nazir will be in Beirut the next day. Estes and Saul are skeptical, fearing that the CIA is being set up; Carrie believes the informant. Back in D.C., Dana makes an unexpected friend, Jessica takes a step into political high society, Brody's Army buddies want him to get to the bottom of why the unerring Tom Walker missed when he shot at the Vice President, and Brody gets an invitation to the Pentagon. Will Nazir show up, or is it an ambush. How will ...`,
+          },
+        ],
+      },
     ],
   },
 ];
 
-function getAllShows() {
-  return R.map(({ id, title, about }) => ({ id, title, about }))(shows);
-}
-
-const mapIndexed = R.addIndex(R.map);
-
-function createEpisode({ index, episodes, seasonNumber }) {
-  const episode = episodes[index];
-  if (!episode) return;
-  return {
-    title: episode.title,
-    about: episode.about,
-    number: index + 1,
-    seasonNumber: seasonNumber,
-    nextEpisode: () => createEpisode({ index: index + 1, episodes, seasonNumber }),
-  };
-}
-
-function getEpisodesByShowIdAndSeasonNumber({ showId, seasonNumber }) {
-  const episodes = R.compose(
-    R.path(['episodes']),
-    R.find(R.propEq({ number: seasonNumber })),
-    R.path(['seasons']),
-    R.find(R.propEq({ id: showId })),
-  )(shows);
-  return mapIndexed((_episode, index) => createEpisode({ index, episodes, seasonNumber }))(
-    episodes,
-  );
-}
-
-exports.getAllShows = getAllShows;
-exports.getEpisodesByShowIdAndSeasonNumber = getEpisodesByShowIdAndSeasonNumber;
+exports.shows = shows;
