@@ -1,3 +1,5 @@
+const R = require('ramda');
+
 const shows = [
   {
     id: '1',
@@ -57,4 +59,31 @@ const shows = [
   },
 ];
 
-exports.shows = shows;
+function pause(duration = 200) {
+  return new Promise(resolve => {
+    setTimeout(function() {
+      resolve();
+    }, duration);
+  });
+}
+
+async function getShows() {
+  await pause();
+  return R.map(({ id, title, about }) => ({ id, title, about }))(shows);
+}
+
+async function getSeasons({ showId }) {
+  await pause();
+  return R.compose(R.path(['seasons']), R.find(R.propEq('id', showId)))(shows);
+}
+
+async function getEpisodes({ showId, seasonNumber }) {
+  await pause();
+  const seasons = await getSeasons({ showId });
+  return R.compose(R.path(['episodes']), R.find(R.propEq('number', seasonNumber)))(seasons);
+}
+
+// exports.shows = shows;
+exports.getShows = getShows;
+exports.getSeasons = getSeasons;
+exports.getEpisodes = getEpisodes;

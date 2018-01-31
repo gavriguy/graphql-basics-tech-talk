@@ -29,20 +29,6 @@ const queryType = new GraphQLObjectType({
         },
       },
     },
-    // episodes: {
-    //   type: new GraphQLList(EpisodeType),
-    //   args: {
-    //     showId: {
-    //       type: new GraphQLNonNull(GraphQLString),
-    //       description: 'The id of the show.',
-    //     },
-    //     seasonNumber: {
-    //       type: new GraphQLNonNull(GraphQLInt),
-    //       description: 'The number of the season',
-    //     },
-    //   },
-    //   resolve: (_, args) => getEpisodesByShowIdAndSeasonNumber(args),
-    // },
   },
 });
 

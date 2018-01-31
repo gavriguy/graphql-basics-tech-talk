@@ -1,24 +1,30 @@
 const R = require('ramda');
-const { shows } = require('../data');
+const { getShows, getSeasons, getEpisodes } = require('../data');
 
 const mapIndexed = R.addIndex(R.map);
 
-function getAllShows({ id }) {
-  const filteredShows = id ? R.filter(R.propEq('id', id))(shows) : shows;
-  return R.map(({ id, title, about, seasons }) => ({
+async function getAllShows() {
+  const shows = await getShows();
+  return R.map(({ id, title, about }) => ({
     id,
     title,
     about,
-    seasons: () =>
-      R.map(season => ({
-        number: season.number,
-        year: season.year,
-        episodes: () =>
-          mapIndexed((_episode, index) =>
-            renderEpisode({ index, episodes: season.episodes, seasonNumber: season.number }),
-          )(season.episodes),
-      }))(seasons),
-  }))(filteredShows);
+    seasons: async () => {
+      const seasons = await getSeasons({ showId: id });
+      return R.map(async ({ number, year }) => {
+        return {
+          number,
+          year,
+          episodes: async () => {
+            const episodes = await getEpisodes({ showId: id, seasonNumber: number });
+            return mapIndexed((_episode, index) =>
+              renderEpisode({ index, episodes, seasonNumber: number }),
+            )(episodes);
+          },
+        };
+      })(seasons);
+    },
+  }))(shows);
 }
 
 function renderEpisode({ index, episodes, seasonNumber }) {
@@ -33,17 +39,4 @@ function renderEpisode({ index, episodes, seasonNumber }) {
   };
 }
 
-function getEpisodesByShowIdAndSeasonNumber({ showId, seasonNumber }) {
-  const episodes = R.compose(
-    R.path(['episodes']),
-    R.find(R.propEq('number', seasonNumber)),
-    R.path(['seasons']),
-    R.find(R.propEq('id', showId)),
-  )(shows);
-  return mapIndexed((_episode, index) => renderEpisode({ index, episodes, seasonNumber }))(
-    episodes,
-  );
-}
-
 exports.getAllShows = getAllShows;
-exports.getEpisodesByShowIdAndSeasonNumber = getEpisodesByShowIdAndSeasonNumber;
