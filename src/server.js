@@ -11,7 +11,7 @@ var {
   GraphQLNonNull,
 } = require('graphql');
 const R = require('ramda');
-const { showType, episodeType } = require('./types');
+const { ShowType, EpisodeType } = require('./types');
 const { getAllShows, getEpisodesByShowIdAndSeasonNumber } = require('./data-utils');
 
 const queryType = new GraphQLObjectType({
@@ -19,11 +19,11 @@ const queryType = new GraphQLObjectType({
   description: 'The root query type.',
   fields: {
     shows: {
-      type: new GraphQLList(showType),
+      type: new GraphQLList(ShowType),
       resolve: getAllShows,
     },
     episodes: {
-      type: new GraphQLList(episodeType),
+      type: new GraphQLList(EpisodeType),
       args: {
         showId: {
           type: new GraphQLNonNull(GraphQLString),

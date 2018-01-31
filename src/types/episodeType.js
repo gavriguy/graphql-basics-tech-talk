@@ -1,6 +1,6 @@
 const { GraphQLObjectType, GraphQLString, GraphQLInt } = require('graphql');
 
-const episodeType = new GraphQLObjectType({
+const EpisodeType = new GraphQLObjectType({
   name: 'Episode',
   description: 'Describes the schema of a episode.',
   fields: () => ({
@@ -13,7 +13,7 @@ const episodeType = new GraphQLObjectType({
       description: 'About the show.',
     },
     nextEpisode: {
-      type: episodeType,
+      type: EpisodeType,
       description: 'The next episode in the current season',
     },
     number: {
@@ -27,4 +27,4 @@ const episodeType = new GraphQLObjectType({
   }),
 });
 
-exports.episodeType = episodeType;
+exports.EpisodeType = EpisodeType;

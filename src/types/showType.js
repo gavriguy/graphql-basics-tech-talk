@@ -1,6 +1,6 @@
 const { GraphQLObjectType, GraphQLID, GraphQLString } = require('graphql');
 
-const showType = new GraphQLObjectType({
+const ShowType = new GraphQLObjectType({
   name: 'Show',
   description: 'Describes the schema of a show.',
   fields: {
@@ -19,4 +19,4 @@ const showType = new GraphQLObjectType({
   },
 });
 
-exports.showType = showType;
+exports.ShowType = ShowType;

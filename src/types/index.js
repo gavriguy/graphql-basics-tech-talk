@@ -1,4 +1,4 @@
-const { showType } = require('./showType');
-const { episodeType } = require('./episodeType');
+const { ShowType } = require('./ShowType');
+const { EpisodeType } = require('./EpisodeType');
 
-module.exports = { showType, episodeType };
+module.exports = { ShowType, EpisodeType };
