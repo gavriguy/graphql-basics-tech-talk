@@ -61,7 +61,7 @@ const shows = [
 
 let hits = 0;
 
-function fakeServerRequest(requestInfo, duration = 200) {
+function fakeServerRequest(requestInfo, duration = 100) {
   hits = hits + 1;
   console.log(`request number (${hits})`, requestInfo);
   return new Promise(resolve => {
@@ -71,14 +71,15 @@ function fakeServerRequest(requestInfo, duration = 200) {
   });
 }
 
-async function getShows() {
-  return R.map(({ id, title, about }) => ({ id, title, about }))(shows);
+async function getShows(id) {
+  const filteredShows = (id === '__ALL__') ? shows : R.filter(R.propEq('id', id))(shows)
+  return R.map(({ id, title, about }) => ({ id, title, about }))(filteredShows);
 }
 
 async function batchGetShows(keys) {
   await fakeServerRequest('getShows()');
   return R.map(key => {
-    return getShows();
+    return getShows(key);
   })(keys);
 }
 

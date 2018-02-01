@@ -14,8 +14,8 @@ const getEpisodeByIndexLoader = new DataLoader(batchGetEpisodeByIndex);
 
 const mapIndexed = R.addIndex(R.map);
 
-async function getAllShows() {
-  const shows = await getShowsLoader.load(true);
+async function getAllShows({ id }) {
+  const shows = await getShowsLoader.load(id || '__ALL__');
   return R.map(({ id, title, about }) => ({
     id,
     title,
