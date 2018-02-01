@@ -59,7 +59,11 @@ const shows = [
   },
 ];
 
-function pause(duration = 200) {
+let hits = 0;
+
+function fakeServerRequest(requestInfo, duration = 200) {
+  hits = hits + 1;
+  console.log(`request number (${hits})`, requestInfo);
   return new Promise(resolve => {
     setTimeout(function() {
       resolve();
@@ -68,28 +72,57 @@ function pause(duration = 200) {
 }
 
 async function getShows() {
-  await pause();
   return R.map(({ id, title, about }) => ({ id, title, about }))(shows);
 }
 
+async function batchGetShows(keys) {
+  await fakeServerRequest('getShows()');
+  return R.map(key => {
+    return getShows();
+  })(keys);
+}
+
 async function getSeasons({ showId }) {
-  await pause();
   return R.compose(R.path(['seasons']), R.find(R.propEq('id', showId)))(shows);
 }
 
+async function batchGetSeasons(keys) {
+  await fakeServerRequest(`batchGetSeasons() keys:${keys}`);
+  return R.map(key => {
+    const [showId] = R.split('/', key);
+    return getSeasons({ showId });
+  })(keys);
+}
+
 async function getEpisodes({ showId, seasonNumber }) {
-  await pause();
   const seasons = await getSeasons({ showId });
   return R.compose(R.path(['episodes']), R.find(R.propEq('number', seasonNumber)))(seasons);
 }
 
+async function batchGetEpisodes(keys) {
+  await fakeServerRequest(`batchGetEpisodes() keys:${keys}`);
+  return R.map(key => {
+    const [showId, seasonNumber] = R.split('/', key);
+    return getEpisodes({ showId, seasonNumber: Number(seasonNumber) });
+  })(keys);
+}
+
 async function getEpisodeByIndex({ showId, seasonNumber, index }) {
-  await pause();
   const episodes = await getEpisodes({ showId, seasonNumber });
   return episodes[index];
 }
 
+async function batchGetEpisodeByIndex(keys) {
+  await fakeServerRequest(`batchGetEpisodeByIndex() keys:${keys}`);
+  return R.map(key => {
+    const [showId, seasonNumber, index] = R.split('/', key);
+    return getEpisodeByIndex({ showId, seasonNumber: Number(seasonNumber), index: Number(index) });
+  })(keys);
+}
+
 exports.getShows = getShows;
-exports.getSeasons = getSeasons;
-exports.getEpisodes = getEpisodes;
-exports.getEpisodeByIndex = getEpisodeByIndex;
+
+exports.batchGetShows = batchGetShows;
+exports.batchGetSeasons = batchGetSeasons;
+exports.batchGetEpisodes = batchGetEpisodes;
+exports.batchGetEpisodeByIndex = batchGetEpisodeByIndex;

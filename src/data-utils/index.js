@@ -1,22 +1,33 @@
 const R = require('ramda');
-const { getShows, getSeasons, getEpisodes, getEpisodeByIndex } = require('../api');
+const DataLoader = require('dataloader');
+const {
+  batchGetShows,
+  batchGetSeasons,
+  batchGetEpisodes,
+  batchGetEpisodeByIndex,
+} = require('../api');
+
+const getShowsLoader = new DataLoader(batchGetShows);
+const getsSeasonsLoader = new DataLoader(batchGetSeasons);
+const getEpisodesLoader = new DataLoader(batchGetEpisodes);
+const getEpisodeByIndexLoader = new DataLoader(batchGetEpisodeByIndex);
 
 const mapIndexed = R.addIndex(R.map);
 
 async function getAllShows() {
-  const shows = await getShows();
+  const shows = await getShowsLoader.load(true);
   return R.map(({ id, title, about }) => ({
     id,
     title,
     about,
     seasons: async () => {
-      const seasons = await getSeasons({ showId: id });
+      const seasons = await getsSeasonsLoader.load(id);
       return R.map(async ({ number, year }) => {
         return {
           number,
           year,
           episodes: async () => {
-            const episodes = await getEpisodes({ showId: id, seasonNumber: number });
+            const episodes = await getEpisodesLoader.load(`${id}/${number}`);
             return mapIndexed(
               async (_episode, index) =>
                 await renderEpisode({ showId: id, seasonNumber: number, index }),
@@ -29,7 +40,7 @@ async function getAllShows() {
 }
 
 async function renderEpisode({ showId, seasonNumber, index }) {
-  const episode = await getEpisodeByIndex({ showId, seasonNumber, index });
+  const episode = await getEpisodeByIndexLoader.load(`${showId}/${seasonNumber}/${index}`);
   if (!episode) return;
   return {
     title: episode.title,
